@@ -293,7 +293,7 @@ class Group:
     name: str
     id: str
     dimensionType: Composite
-    blockLength: int
+    blockLength: Optional[int] = None
     description: Optional[str] = None
     fields: List[Union['Group', Field]] = field(default_factory=list)
 
@@ -302,7 +302,7 @@ class Group:
 class Message:
     name: str
     id: int
-    blockLength: int    # Space reserved for the root level of the Message
+    blockLength: Optional[int] = None # Space reserved for the root level of the Message
     description: Optional[str] = None
     fields: List[Union[Group, Field]] = field(default_factory=list, repr=False)
 
@@ -1083,9 +1083,10 @@ def _parse_schema(f: TextIO) -> Schema:
         elif tag == "message":
             if action == "start":
                 attrs = dict(elem.items())
+                block_length = int(attrs['blockLength']) if 'blockLength' in attrs else None
                 stack.append(Message(name=attrs['name'],
                                      id=int(attrs['id']),
-                                     blockLength=int(attrs['blockLength']),
+                                     blockLength=block_length,
                                      description=attrs.get('description')))
 
             elif action == "end":
@@ -1096,11 +1097,12 @@ def _parse_schema(f: TextIO) -> Schema:
         elif tag == "group":
             if action == "start":
                 attrs = dict(elem.items())
+                block_length = int(attrs['blockLength']) if 'blockLength' in attrs else None
                 stack.append(Group(
                     name=attrs['name'],
                     id=attrs['id'],
                     dimensionType=stack[0].types[attrs.get('dimensionType', 'groupSizeEncoding')],
-                    blockLength=int(attrs['blockLength'])))
+                    blockLength=block_length))
 
             elif action == "end":
                 x = stack.pop()
