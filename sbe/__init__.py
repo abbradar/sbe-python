@@ -951,6 +951,7 @@ def _walk_fields_decode(schema: Schema, rv: dict, fields: List[Union[Group, Fiel
 
 def _parse_schema(f: TextIO) -> Schema:
     doc = lxml.etree.parse(f)
+    doc.xinclude()
     stack = []
 
     for action, elem in lxml.etree.iterwalk(doc, ("start", "end")):
