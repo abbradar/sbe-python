@@ -1068,7 +1068,7 @@ def _parse_schema(f: TextIO) -> Schema:
                 assert isinstance(stack[-1], Set)
                 stack[-1].choices.append(x)
 
-        elif tag == "field" or tag=="data":
+        elif tag == "field" or tag == "data" or tag == "ref":
             if action == "start":
                 assert len(elem) == 0
 
@@ -1078,8 +1078,12 @@ def _parse_schema(f: TextIO) -> Schema:
                 else:
                     field_type = stack[0].types[attrs['type']]
 
-                assert isinstance(stack[-1], (Group, Message))
-                stack[-1].fields.append(Field(name=attrs['name'], id_=attrs['id'], type_=field_type))
+                if tag == "ref":
+                    assert isinstance(stack[-1], Composite)
+                    stack[-1].types.append(x)
+                else:
+                    assert isinstance(stack[-1], (Group, Message))
+                    stack[-1].fields.append(Field(name=attrs['name'], id_=attrs['id'], type_=field_type))
 
         elif tag == "message":
             if action == "start":
