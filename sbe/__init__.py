@@ -29,9 +29,15 @@ class SetEncodingType(enum.Enum):
 
 
 class EnumEncodingType(enum.Enum):
+    CHAR = 'char'
     UINT8 = 'uint8'
     UINT16 = 'uint16'
-    CHAR = 'char'
+    UINT32 = 'uint32'
+    UINT64 = 'uint64'
+    INT8 = 'int8'
+    INT16 = 'int16'
+    INT32 = 'int32'
+    INT64 = 'int64'
 
 
 class Presence(enum.Enum):
