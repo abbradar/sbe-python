@@ -951,7 +951,7 @@ def _walk_fields_decode(schema: Schema, rv: dict, fields: List[Union[Group, Fiel
             _walk_fields_decode_composite(schema, rv[f.name], f.type, vals, cursor)
 
         else:
-            if f.type.presence != Presence.CONSTANT:
+            if not isinstance(f, Type) or f.type.presence != Presence.CONSTANT:
                 _decode_value(schema, rv, f.name, f.type, vals, cursor)
 
 
