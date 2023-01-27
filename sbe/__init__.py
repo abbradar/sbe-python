@@ -667,7 +667,7 @@ def _unpack_composite(schema: Schema, composite: Composite, buffer: memoryview):
 
 def _prettify_type(_schema: Schema, t: Type, v):
     if t.primitiveType == PrimitiveType.CHAR and (
-        t.characterEncoding == CharacterEncoding.ASCII or t.characterEncoding is None
+        t.characterEncoding == CharacterEncoding.ASCII
     ):
         return v.split(b'\x00', 1)[0].decode('ascii', errors='ignore').strip()
 
