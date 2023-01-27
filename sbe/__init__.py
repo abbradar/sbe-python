@@ -1010,6 +1010,9 @@ def _parse_schema(f: TextIO) -> Schema:
                     x.semanticType = attrs['semanticType']
                 if 'presence' in attrs:
                     x.presence = PRESENCE_TYPES[attrs['presence']]
+                else:
+                    x.presence = Presence.REQUIRED
+
 
                 stack.append(x)
 
